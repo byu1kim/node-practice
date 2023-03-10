@@ -22,13 +22,14 @@
     <main>
       <form method="POST" action="/signup">
         <label>username</label>
-        <input type="text" />
+        <input type="text" name="username" />
         <label>password</label>
-        <input type="password" />
+        <input type="password" name="password" />
         <label>password confirmation</label>
-        <input type="password" />
+        <input type="password" name="password2" />
         <button type="submit">Sing Up</button>
       </form>
+      <p><%= message %></p>
     </main>
   </body>
 </html>

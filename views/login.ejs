@@ -20,13 +20,15 @@
       </nav>
     </header>
     <main>
+      <p><%= loggedInUser %></p>
       <form method="POST" action="/login">
         <label>username</label>
-        <input type="text" />
+        <input type="text" name="username" />
         <label>password</label>
-        <input type="password" />
+        <input type="password" name="password" />
         <button type="submit">Login</button>
       </form>
+      <p><%= message %></p>
     </main>
   </body>
 </html>

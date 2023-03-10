@@ -1,10 +1,10 @@
-import bcyrpt from "bcrypt";
 import User from "../models/User.js";
 import passport from "passport";
-import RequestService from "../services/RequestService.js";
+import _userOps from "../data/userOps.js";
 
 export const index = (req, res) => {
-  res.render("index");
+  res.cookie("a", "hoho");
+  res.render("index", { message: "" });
 };
 
 // GET Signup
@@ -21,52 +21,87 @@ export const postSignup = async (req, res) => {
     return res.render("signup", { message: "Password no match" });
   }
 
-  // Username verification
-
-  // create User
-  let reqInfo = RequestService.reqHelper(req);
-  console.log(reqInfo);
   const newUser = new User({
     username,
-  }); // Uses passport to register the user. // Pass in user object without password // and password as next parameter.
-  User.register(new User(newUser), password, (err, account) => {
-    // Show registration form with errors if fail.
+  });
+
+  // Verify username and Create user
+  User.register(new User({ username }), password, (err, user) => {
     if (err) {
       return res.render("signup", {
         message: err,
       });
     }
-    return res.render("signup", { message: "Success to Sign up!" });
-    // User registered so authenticate and redirect to secure // area.
-    // passport.authenticate("local")(req, res, () => {
-    //   return res.render("signup", { message: "Success to Sign up!" });
-    // });
+    // Login
+    passport.authenticate("local")(req, res, () => {
+      return res.redirect("/secure");
+    });
   });
 };
 
 // GET Login
 export const login = (req, res) => {
-  res.render("login", { message: "" });
+  let message = req.query.message;
+  res.render("login", { message });
 };
 
 // POST Login
-export const postLogin = async (req, res) => {
-  const { username, password } = req.body;
-
-  // User verification
-
-  // Password verification
-
-  // Store login information to session
-
-  res.render("login", { message: "Logged In" });
+export const postLogin = (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/profile",
+    failureRedirect: "/login?message=Invalid login.",
+  })(req, res, next);
 };
 
+// Logout
 export const logout = (req, res) => {
-  res.redirect("/");
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    } else {
+      res.redirect("/login");
+    }
+  });
 };
-export const profile = (req, res) => {
-  res.render("profile");
+
+export const profile = async (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.render("profile", { message: "" });
+  } else {
+    res.redirect("/login?message=You must be logged in to view this page.");
+  }
+};
+
+export const secure = (req, res) => {
+  res.render("secure");
+};
+
+export const admin = async (req, res) => {
+  const authorized = ["Admin"];
+  if (req.isAuthenticated()) {
+    const matchingRoles = req.roles?.filter((role) => authorized.includes(role));
+    if (matchingRoles.length > 0) {
+      return res.render("admin", { message: "" });
+    } else {
+      return res.redirect("/login?message=You must be a admin to access this area.");
+    }
+  } else {
+    return res.redirect("/login?message=You must be a admin to access this area.");
+  }
+};
+
+export const manager = async (req, res) => {
+  const authorized = ["Admin", "Manager"];
+  if (req.isAuthenticated()) {
+    const matchingRoles = req.roles?.filter((role) => authorized.includes(role));
+    if (matchingRoles.length > 0) {
+      return res.render("manager", { message: "" });
+    } else {
+      return res.redirect("/login?message=You must be a manager or admin to access this area.");
+    }
+  } else {
+    return res.redirect("/login?message=You must be a manager or admin to access this area.");
+  }
 };
 
 /* request properties

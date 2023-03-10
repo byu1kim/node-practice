@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
   },
+  roles: { type: Array },
 });
 
 // Password authentication

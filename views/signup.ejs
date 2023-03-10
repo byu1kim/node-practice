@@ -1,35 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/signup">Signup</a></li>
-          <li><a href="/profile">Profile</a></li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main>
-      <form method="POST" action="/signup">
-        <label>username</label>
-        <input type="text" name="username" />
-        <label>password</label>
-        <input type="password" name="password" />
-        <label>password confirmation</label>
-        <input type="password" name="password2" />
-        <button type="submit">Sing Up</button>
-      </form>
-      <p><%= message %></p>
-    </main>
-  </body>
-</html>
+<form method="POST" action="/signup">
+  <label>username</label>
+  <input type="text" name="username" />
+  <label>password</label>
+  <input type="password" name="password" />
+  <label>password confirmation</label>
+  <input type="password" name="password2" />
+  <button type="submit">Sing Up</button>
+</form>
+<p><%= message %></p>

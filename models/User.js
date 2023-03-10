@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import passportLocalmongoose from "passport-local-mongoose";
 
 const userSchema = mongoose.Schema({
   username: {
@@ -12,5 +13,7 @@ const userSchema = mongoose.Schema({
 });
 
 // Password authentication
+userSchema.plugin(passportLocalmongoose);
+
 const User = mongoose.model("User", userSchema);
 export default User;
